@@ -13,10 +13,10 @@ This python script reads the FindMy cache files and publishes the location
 data to MQTT to be used in Home Assistant. It uses auto discovery so no 
 further entity configuration is needed in Home Assistant. Consult the 
 documentation on how to set up an MQTT broker for Home Assistant. The script
-needs to be executed on macOS with a running FindMy installation. It needs
-to be executed as root and in a terminal with full disk access to be able 
-to read the cache files. The script must be configured using the variables
-below and the mqtt client password as environment variable.
+needs to be executed on macOS with a running FindMy installation. It must 
+be executed as root and in a terminal with full disk access to be able 
+to read the cache files. Configure the script before using it by changing 
+the constants in `findmy.py` and the MQTT client password as environment variable.
 
 ## Supports
 - Devices (iPhones, iPads, MacBooks, AirPods, Apple Watches, ...)
