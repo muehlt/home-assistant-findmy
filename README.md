@@ -6,6 +6,7 @@ A python script that reads local FindMy cache files to publish device locations 
 This script is provided as-is, without any warranty. Use at your own risk.
 This code is not tested and should only be used for experimental purposes.
 Loading the FindMy cache files is not inteded by Apple and might cause problems.
+The project is not affiliated to Apple Inc., Home Assistant or MQTT.
 
 ## Description
 
