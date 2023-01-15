@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 
-# .                                       .           .                   .           
-# |                                 o     |           |        ,- o       |           
-# |-. ,-. ;-.-. ,-. --- ,-: ,-. ,-. . ,-. |-  ,-: ;-. |-  ---  |  . ;-. ,-| ;-.-. . . 
-# | | | | | | | |-'     | | `-. `-. | `-. |   | | | | |        |- | | | | | | | | | | 
-# ' ' `-' ' ' ' `-'     `-` `-' `-' ' `-' `-' `-` ' ' `-'      |  ' ' ' `-' ' ' ' `-| 
-#                                                             -'                  `-'                                                                |/                                 \| 
+# .                                       .           .                   .          
+# |                                 o     |           |        ,- o       |          
+# |-. ,-. ;-.-. ,-. --- ,-: ,-. ,-. . ,-. |-  ,-: ;-. |-  ---  |  . ;-. ,-| ;-.-. . .
+# | | | | | | | |-'     | | `-. `-. | `-. |   | | | | |        |- | | | | | | | | | |
+# ' ' `-' ' ' ' `-'     `-` `-' `-' ' `-' `-' `-` ' ' `-'      |  ' ' ' `-' ' ' ' `-|
+#                                                             -'                  `-'
 # made with ♡ by muehlt
 # github.com/muehlt
 # version 0.0.1
@@ -97,11 +97,11 @@ def get_device_id(name):
 
 def get_source_type(apple_position_type):
     switcher = {
-        "crowdsourced": "bluetooth_le",
+        "crowdsourced": "gps", # ble only used for stationary ble trackers
         "safeLocation": "gps",
         "Wifi": "router"
     }
-    return switcher.get(apple_position_type, "manual")
+    return switcher.get(apple_position_type, "gps")
 
 def get_location_name(pos):
     for name, location in KNOWN_LOCATIONS.items():
