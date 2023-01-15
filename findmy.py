@@ -114,13 +114,13 @@ def send_data_items():
     for device in load_data(cache_file_location_items):
         device_name = device['name']        
         battery_status = device['batteryStatus']
+        source_type = get_source_type(device.get('location').get('positionType') if device.get('location') else None)
 
-        location_name = source_type = address = latitude = longitude = accuracy = lastUpdate = "unknown"
+        location_name = address = latitude = longitude = accuracy = lastUpdate = "unknown"
         if device['location'] is not None:
             latitude = device['location']['latitude']
             longitude = device['location']['longitude']
             address = device['address']
-            source_type = get_source_type(device['location']['positionType'])
             accuracy = math.sqrt(device['location']['horizontalAccuracy'] **2 + device['location']['verticalAccuracy'] **2)
             location_name = get_location_name((latitude, longitude))
             lastUpdate = device['location']['timeStamp']
@@ -163,13 +163,13 @@ def send_data_devices():
         device_name = device['name']
         battery_status = device['batteryStatus']
         battery_sevel = device['batteryLevel']
+        source_type = get_source_type(device.get('location').get('positionType') if device.get('location') else None)
 
-        location_name = source_type = address = latitude = longitude = accuracy = lastUpdate = "unknown"
+        location_name = address = latitude = longitude = accuracy = lastUpdate = "unknown"
         if device['location'] is not None:
             latitude = device['location']['latitude']
             longitude = device['location']['longitude']
             address = device['address']
-            source_type = get_source_type(device['location']['positionType'])
             accuracy = math.sqrt(device['location']['horizontalAccuracy'] **2 + device['location']['verticalAccuracy'] **2)
             location_name = get_location_name((latitude, longitude))
             lastUpdate = device['location']['timeStamp']
