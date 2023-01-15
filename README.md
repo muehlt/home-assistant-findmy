@@ -31,3 +31,5 @@ below and the mqtt client password as environment variable.
 4. Set your MQTT client password using an environment variable `export MQTT_PASSWORD=your_password`
 5. Ensure that your terminal has [full disk access](https://support.apple.com/de-de/guide/security/secddd1d86a6/web)
 6. Open FindMy in the background and run `sudo python3 findmy.py`
+
+Could I help you? [You can buy me a coffee here if you want 🙏](https://buymeacoffee.com/muehlt)
