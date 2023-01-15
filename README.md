@@ -33,4 +33,10 @@ the constants in `findmy.py` and the MQTT client password as environment variabl
 5. Ensure that your terminal has [full disk access](https://support.apple.com/de-de/guide/security/secddd1d86a6/web)
 6. Open FindMy in the background and run `sudo python3 findmy.py`
 
+## Next steps
+
+- Use observers to only publish data that changed
+- PyPI
+- Support DeviceGroups
+
 Could I help you? [You can buy me a coffee here if you want 🙏](https://buymeacoffee.com/muehlt)
