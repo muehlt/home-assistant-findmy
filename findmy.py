@@ -130,7 +130,7 @@ def send_data_items():
         device_id = get_device_id(device_name)
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
-            "name": device_name,
+            "name": "Location",
             "unique_id": device_id,
             "state_topic": device_topic + "state",
             "json_attributes_topic": device_topic + "attributes",
@@ -179,7 +179,7 @@ def send_data_devices():
         device_id = get_device_id(device_name)
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
-            "name": device_name,
+            "name": "Location",
             "unique_id": device_id,
             "state_topic": device_topic + "state",
             "json_attributes_topic": device_topic + "attributes",
