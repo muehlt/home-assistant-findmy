@@ -8,7 +8,7 @@
 #                                                             -'                  `-'
 # made with ♡ by muehlt
 # github.com/muehlt
-# version 0.0.1
+# version 0.0.2
 #
 # DESCRIPTION:  This python script reads the FindMy cache files and publishes the location 
 #               data to MQTT to be used in Home Assistant. It uses auto discovery so no 
@@ -130,7 +130,6 @@ def send_data_items():
         device_id = get_device_id(device_name)
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
-            "name": device_name,
             "unique_id": device_id,
             "state_topic": device_topic + "state",
             "json_attributes_topic": device_topic + "attributes",
@@ -179,7 +178,6 @@ def send_data_devices():
         device_id = get_device_id(device_name)
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
-            "name": device_name,
             "unique_id": device_id,
             "state_topic": device_topic + "state",
             "json_attributes_topic": device_topic + "attributes",
