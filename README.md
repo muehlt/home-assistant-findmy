@@ -99,7 +99,7 @@ e.g. `sudo findmy -l /path/to/known_locations.json`
 
 ## Versions
 
-### 1.0.0 - Breaking changes
+### 1.0.X - Breaking changes
 - Configuration is now done solely via environment variables and a JSON file for known locations
 - Installation using pip is now possible
 - Device data is only updated if the location timestamp changed in FindMy (skip with `-f` flag)

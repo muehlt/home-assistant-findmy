@@ -8,7 +8,7 @@ with open("requirements.txt", "r") as f:
 
 setup(
     name="home-assistant-findmy",
-    version="1.0.0",
+    version="1.0.1",
     author="muehlt",
     author_email="thomas@savory.at",
     description="A python script that reads local FindMy cache files to broadcast device locations (including those of AirTags, AirPods, Apple Watches, iPhones) to Home Assistant via MQTT.",
