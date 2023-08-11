@@ -8,7 +8,7 @@
 #                                                             -'                  `-'
 # made with ♡ by muehlt
 # github.com/muehlt
-# version 1.0.1
+# version 1.0.2
 #
 # DESCRIPTION:  This python script reads the FindMy cache files and publishes the location
 #               data to MQTT to be used in Home Assistant. It uses auto discovery so no
