@@ -1,11 +1,9 @@
 # home-assistant-findmy
 A python script that reads local FindMy cache files to publish device locations and metadata (including those of AirTags, AirPods, Apple Watches, iPhones) to Home Assistant via MQTT.
 
----
+[Migration to v1.0.2](https://github.com/muehlt/home-assistant-findmy/tree/main/.github/MIGRATION_GUIDE/1.0.2.md) • 
+[Support this project](https://buymeacoffee.com/muehlt)
 
-[Migration to v1.0.2](https://github.com/muehlt/home-assistant-findmy/tree/main/.github/MIGRATION_GUIDE/1.0.2.md)
-
----
 
 ## Disclaimer
 
