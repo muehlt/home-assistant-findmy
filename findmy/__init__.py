@@ -30,7 +30,6 @@ from datetime import datetime
 import math
 import re
 import time
-
 import click
 import paho.mqtt.client as mqtt
 import os
@@ -42,33 +41,27 @@ from rich.table import Table
 
 load_dotenv()
 
-###################
-#  CONFIGURATION  #
-###################
-
-MQTT_BROKER_IP = os.environ.get('MQTT_BROKER_IP')
-MQTT_BROKER_PORT = int(os.environ.get('MQTT_BROKER_PORT')) or 1883
-MQTT_CLIENT_USERNAME = os.environ.get('MQTT_CLIENT_USERNAME')
-MQTT_CLIENT_PASSWORD = os.environ.get('MQTT_CLIENT_PASSWORD')
-FINDMY_FILE_SCAN_INTERVAL = int(os.environ.get('FINDMY_FILE_SCAN_INTERVAL')) or 5  # seconds
-
 DEFAULT_TOLERANCE = 70  # meters
-known_locations = {}
 
-##########
-#  CODE  #
-##########
+(mqtt_broker_ip,
+ mqtt_broker_port,
+ mqtt_client_username,
+ mqtt_client_password,
+ findmy_file_scan_interval) = (None,) * 5
 
 cache_file_location = os.path.expanduser('~') + '/Library/Caches/com.apple.findmy.fmipcore/'
 cache_file_location_items = cache_file_location + 'Items.data'
 cache_file_location_devices = cache_file_location + 'Devices.data'
 
+known_locations = {}
 device_updates = {}
 
 client = mqtt.Client("ha-client")
-client.username_pw_set(MQTT_CLIENT_USERNAME, MQTT_CLIENT_PASSWORD)
-client.connect(host=MQTT_BROKER_IP, port=MQTT_BROKER_PORT)
-client.loop_start()
+
+def connect_broker():
+    client.username_pw_set(mqtt_client_username, mqtt_client_password)
+    client.connect(host=mqtt_broker_ip, port=mqtt_broker_port)
+    client.loop_start()
 
 
 def get_time(timestamp):
@@ -110,7 +103,7 @@ def get_location_name(pos):
     return "not_home"
 
 
-def send_data_items(forcesync):
+def send_data_items(force_sync):
     for device in load_data(cache_file_location_items):
         device_name = device['name']
         battery_status = device['batteryStatus']
@@ -127,7 +120,7 @@ def send_data_items(forcesync):
             lastUpdate = device['location']['timeStamp']
 
         device_update = device_updates.get(device_name)
-        if not forcesync and device_update and len(device_update) > 0 and device_update[0] == lastUpdate:
+        if not force_sync and device_update and len(device_update) > 0 and device_update[0] == lastUpdate:
             continue
 
         device_updates[device_name] = (lastUpdate, location_name)
@@ -163,7 +156,7 @@ def send_data_items(forcesync):
         client.publish(device_topic + "state", location_name)
 
 
-def send_data_devices(forcesync):
+def send_data_devices(force_sync):
     for device in load_data(cache_file_location_devices):
         device_name = device['name']
         battery_status = device['batteryStatus']
@@ -181,7 +174,7 @@ def send_data_devices(forcesync):
             lastUpdate = device['location']['timeStamp']
 
         device_update = device_updates.get(device_name)
-        if not forcesync and device_update and len(device_update) > 0 and device_update[0] == lastUpdate:
+        if not force_sync and device_update and len(device_update) > 0 and device_update[0] == lastUpdate:
             continue
 
         device_updates[device_name] = (lastUpdate, location_name)
@@ -218,12 +211,13 @@ def send_data_devices(forcesync):
         client.publish(device_topic + "state", location_name)
 
 
-def scan_cache(privacy, forcesync):
+def scan_cache(privacy, force_sync):
     console = Console()
-    with console.status(f"[bold green]Synchronizing {len(device_updates)} devices and {len(known_locations)} known locations") as status:
+    with console.status(
+            f"[bold green]Synchronizing {len(device_updates)} devices and {len(known_locations)} known locations") as status:
         while True:
-            send_data_items(forcesync)
-            send_data_devices(forcesync)
+            send_data_items(force_sync)
+            send_data_devices(force_sync)
 
             os.system('clear')
 
@@ -236,9 +230,10 @@ def scan_cache(privacy, forcesync):
                     device_table.add_row(device, get_time(details[0]), details[1])
                 console.print(device_table)
 
-            status.update(f"[bold green]Synchronizing {len(device_updates)} devices and {len(known_locations)} known locations")
+            status.update(
+                f"[bold green]Synchronizing {len(device_updates)} devices and {len(known_locations)} known locations")
 
-            time.sleep(FINDMY_FILE_SCAN_INTERVAL)
+            time.sleep(findmy_file_scan_interval)
 
 
 def validate_param_locations(_, __, path):
@@ -278,13 +273,51 @@ def set_known_locations(locations):
     known_locations = _known_locations
 
 
-@click.command()
-@click.option('--locations', '-l', callback=validate_param_locations, help='Path to the known locations JSON configuration file')
-@click.option('--privacy', '-p', is_flag=True, help='Hides specific device data from the console output')
-@click.option('--forcesync', '-f', is_flag=True, help='Disables the timestamp check and provides and update every FINDMY_FILE_SCAN_INTERVAL seconds')
-def main(locations, privacy, forcesync):
+@click.command("home-assistant-findmy", no_args_is_help=True)
+@click.option('--locations', '-l',
+              type=click.Path(),
+              callback=validate_param_locations,
+              required=True,
+              help='Path to the known locations JSON configuration file')
+@click.option('--privacy', '-p',
+              is_flag=True,
+              help='Hides specific device data from the console output')
+@click.option('--force-sync', '-f',
+              is_flag=True,
+              help='Disables the timestamp check and provides and update every FINDMY_FILE_SCAN_INTERVAL seconds')
+@click.option('--ip',
+              envvar='MQTT_BROKER_IP',
+              required=True,
+              help="IP of the MQTT broker.")
+@click.option('--port',
+              envvar='MQTT_BROKER_PORT',
+              default=1883, type=int,
+              help="Port of the MQTT broker.")
+@click.option('--username',
+              envvar='MQTT_CLIENT_USERNAME',
+              required=True,
+              help="MQTT client username.")
+@click.option('--password',
+              envvar='MQTT_CLIENT_PASSWORD',
+              required=True,
+              help="[WARNING] Set this via environment variable! MQTT client password.")
+@click.option('--scan-interval',
+              envvar='FINDMY_FILE_SCAN_INTERVAL',
+              default=5,
+              type=int,
+              help="File scan interval in seconds.")
+def main(locations, privacy, force_sync, ip, port, username, password, scan_interval):
+    global mqtt_broker_ip, mqtt_broker_port, mqtt_client_username, mqtt_client_password, findmy_file_scan_interval
+
+    mqtt_broker_ip = ip
+    mqtt_broker_port = port
+    mqtt_client_username = username
+    mqtt_client_password = password
+    findmy_file_scan_interval = scan_interval
+
+    connect_broker()
     set_known_locations(locations)
-    scan_cache(privacy, forcesync)
+    scan_cache(privacy, force_sync)
 
 
 if __name__ == '__main__':
