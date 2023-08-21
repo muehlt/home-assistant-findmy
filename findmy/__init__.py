@@ -125,7 +125,7 @@ def send_data_items(force_sync):
 
         device_updates[device_name] = (lastUpdate, location_name)
 
-        device_id = get_device_id(device_name)
+        device_id = re.sub('[^0-9a-zA-Z_]+', '', get_device_id(device_name))
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
             "unique_id": device_id,
@@ -179,7 +179,7 @@ def send_data_devices(force_sync):
 
         device_updates[device_name] = (lastUpdate, location_name)
 
-        device_id = get_device_id(device_name)
+        device_id = re.sub('[^0-9a-zA-Z_]+', '', get_device_id(device_name))
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
             "unique_id": device_id,
