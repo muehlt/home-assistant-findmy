@@ -82,7 +82,8 @@ def load_data(data_file):
 
 
 def get_device_id(name):
-    return unidecode(re.sub(r'[\s-]', '_', name).lower())
+    name = unidecode(re.sub(r'[\s-]', '_', name).lower())
+    return re.sub(r'[^a-zA-Z0-9_-]', '', name)
 
 
 def get_source_type(apple_position_type):
