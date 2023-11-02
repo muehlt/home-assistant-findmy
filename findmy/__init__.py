@@ -82,7 +82,8 @@ def load_data(data_file):
 
 
 def get_device_id(name):
-    return unidecode(re.sub(r'[\s-]', '_', name).lower())
+    device_id = unidecode(re.sub(r'[\s-]', '_', name).lower())
+    return re.sub('[_]+', '_', re.sub('[^0-9a-zA-Z_-]+', '', device_id))
 
 
 def get_source_type(apple_position_type):
@@ -119,7 +120,7 @@ def send_data_items(force_sync):
             location_name = get_location_name((latitude, longitude))
             lastUpdate = device['location']['timeStamp']
 
-        device_id = re.sub('[_]+', '_', re.sub('[^0-9a-zA-Z_-]+', '', get_device_id(device_name)))
+        device_id = get_device_id(device_name)
         updates_identifier = f"{device_name} ({device_id})"
 
         device_update = device_updates.get(updates_identifier)
@@ -174,7 +175,7 @@ def send_data_devices(force_sync):
             location_name = get_location_name((latitude, longitude))
             lastUpdate = device['location']['timeStamp']
 
-        device_id = re.sub('[_]+', '_', re.sub('[^0-9a-zA-Z_-]+', '', get_device_id(device_name)))
+        device_id = get_device_id(device_name)
         updates_identifier = f"{device_name} ({device_id})"
 
         device_update = device_updates.get(updates_identifier)
