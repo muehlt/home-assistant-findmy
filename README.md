@@ -1,7 +1,7 @@
 # home-assistant-findmy
 A python script that reads local FindMy cache files to publish device locations and metadata (including those of AirTags, AirPods, Apple Watches, iPhones) to Home Assistant via MQTT.
 
-[Migration to v1.0.2](https://github.com/muehlt/home-assistant-findmy/tree/main/.github/MIGRATION_GUIDE/1.0.2.md) • 
+[Migration from < v1.x.x](https://github.com/muehlt/home-assistant-findmy/tree/main/.github/MIGRATION_GUIDE/1.0.2.md) • 
 [Support this project](https://buymeacoffee.com/muehlt)
 
 
@@ -19,8 +19,7 @@ data to MQTT to be used in Home Assistant. It uses auto discovery so no
 further entity configuration is needed in Home Assistant. Consult the 
 documentation on how to set up an MQTT broker for Home Assistant. The script
 needs to be executed on macOS with a running FindMy installation. It must 
-be executed as root and in a terminal with full disk access to be able 
-to read the cache files.
+be executed in a terminal with full disk access to be able to read the cache files.
 
 ## Supports
 - Devices (iPhones, iPads, MacBooks, AirPods, Apple Watches, ...)
@@ -29,7 +28,7 @@ to read the cache files.
 
 ## How to use
 
-[Migration to v1.0.2](https://github.com/muehlt/home-assistant-findmy/tree/main/.github/MIGRATION_GUIDE/1.0.2.md)
+[Migration from < v1.x.x](https://github.com/muehlt/home-assistant-findmy/tree/main/.github/MIGRATION_GUIDE/1.0.2.md)
 
 ### Basic installation
 
@@ -104,6 +103,13 @@ e.g. `findmy -l /path/to/known_locations.json`
 > **Warning**: For security reasons, it's advised not to set the password using the `--password` parameter, except in rare test cases. Always prefer setting it via the environment variable.
 
 ## Versions
+
+### 1.1.0
+In very rare occasions, or if you have changed the code before, this version might
+lead to changed device IDs being propagated to your Home Assistant instance.
+- Fix invalid device IDs by removing special characters
+- Cleanup of device IDs client side for consistency
+- Minor improvements
 
 ### 1.0.X - Breaking changes
 - Configuration is now done solely via environment variables and a JSON file for known locations
