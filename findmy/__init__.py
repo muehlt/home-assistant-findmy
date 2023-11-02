@@ -8,16 +8,16 @@
 #                                                             -'                  `-'
 # made with ♡ by muehlt
 # github.com/muehlt
-# version 1.0.2
+# version 1.1.0
 #
 # DESCRIPTION:  This python script reads the FindMy cache files and publishes the location
 #               data to MQTT to be used in Home Assistant. It uses auto discovery so no
 #               further entity configuration is needed in Home Assistant. Consult the
 #               documentation on how to set up an MQTT broker for Home Assistant. The script
 #               needs to be executed on macOS with a running FindMy installation. It needs
-#               to be executed as root and in a terminal with full disk access to be able
-#               to read the cache files. The script must be configured using the variables
-#               below and the mqtt client password as environment variable.
+#               to be executed in a terminal with full disk access to be able to read the
+#               cache files. The script must be configured using the variables below and the
+#               mqtt client password as environment variable.
 #
 # DISCLAIMER:   This script is provided as-is, without any warranty. Use at your own risk.
 #               This code is not tested and should only be used for experimental purposes.
@@ -119,13 +119,14 @@ def send_data_items(force_sync):
             location_name = get_location_name((latitude, longitude))
             lastUpdate = device['location']['timeStamp']
 
-        device_update = device_updates.get(device_name)
+        device_id = re.sub('[_]+', '_', re.sub('[^0-9a-zA-Z_-]+', '', get_device_id(device_name)))
+        updates_identifier = f"{device_name} ({device_id})"
+
+        device_update = device_updates.get(updates_identifier)
         if not force_sync and device_update and len(device_update) > 0 and device_update[0] == lastUpdate:
             continue
 
-        device_updates[device_name] = (lastUpdate, location_name)
-
-        device_id = re.sub('[^0-9a-zA-Z_]+', '', get_device_id(device_name))
+        device_updates[updates_identifier] = (lastUpdate, location_name)
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
             "unique_id": device_id,
@@ -173,13 +174,14 @@ def send_data_devices(force_sync):
             location_name = get_location_name((latitude, longitude))
             lastUpdate = device['location']['timeStamp']
 
-        device_update = device_updates.get(device_name)
+        device_id = re.sub('[_]+', '_', re.sub('[^0-9a-zA-Z_-]+', '', get_device_id(device_name)))
+        updates_identifier = f"{device_name} ({device_id})"
+
+        device_update = device_updates.get(updates_identifier)
         if not force_sync and device_update and len(device_update) > 0 and device_update[0] == lastUpdate:
             continue
 
-        device_updates[device_name] = (lastUpdate, location_name)
-
-        device_id = re.sub('[^0-9a-zA-Z_]+', '', get_device_id(device_name))
+        device_updates[updates_identifier] = (lastUpdate, location_name)
         device_topic = f"homeassistant/device_tracker/{device_id}/"
         device_config = {
             "unique_id": device_id,
