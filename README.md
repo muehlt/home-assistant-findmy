@@ -4,6 +4,9 @@ A python script that reads local FindMy cache files to publish device locations 
 [Migration from < v1.x.x](https://github.com/muehlt/home-assistant-findmy/tree/main/.github/MIGRATION_GUIDE/1.0.2.md) • 
 [Support this project](https://buymeacoffee.com/muehlt)
 
+> [!IMPORTANT]
+> `home-assistant-findmy` might currently not work on macOS 14.4 (March 2024) and above due to breaking changes introduced by Apple. Please do not upgrade the machine you intend to use it on for now.
+
 
 ## Disclaimer
 
